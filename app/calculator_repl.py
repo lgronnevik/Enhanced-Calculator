@@ -52,11 +52,11 @@ def main():
     while True:
         user_input = input(">>> ").strip()
         result = process_command(user_input, history, caretaker)
-        if result == "exit":
+        if isinstance(result, str) and result == "exit":
             print(f"Saving history to {history.filename}...")
             print("Goodbye!")
             break
-        elif result == "help":
+        elif isinstance(result, str) and result == "help":
             print("\nCommands:")
             print("  add a b       → addition")
             print("  subtract a b  → subtraction")
@@ -69,9 +69,9 @@ def main():
             print("  redo          → redo last undone calculation")
             print("  help          → show this message")
             print("  exit / quit   → exit the calculator\n")
-        elif result == "undo":
+        elif isinstance(result, str) and result == "undo":
             print("Undo performed.")
-        elif result == "redo":
+        elif isinstance(result, str) and result == "redo":
             print("Redo performed.")
         elif isinstance(result, str) and result.startswith("Error"):
             print(result)

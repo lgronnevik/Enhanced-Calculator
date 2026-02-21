@@ -1,3 +1,69 @@
+def test_repl_main_empty_input():
+    # Simulate empty input to cover line 43
+    inputs = iter(["", "exit"])
+    printed = []
+
+    def fake_input(prompt):
+        return next(inputs)
+
+    def fake_print(*args, **kwargs):
+        printed.append(args)
+
+    with patch.object(builtins, "input", fake_input), patch.object(builtins, "print", fake_print):
+        from app.calculator_repl import main
+        main()
+    assert any("Goodbye!" in str(arg) for args in printed for arg in args)
+def test_repl_main_all_branches():
+    # Simulate all REPL commands to cover every branch and print
+    inputs = iter([
+        "help",         # menu print
+        "add 1 2",     # operation
+        "subtract 5 3",# operation
+        "multiply 2 4",# operation
+        "divide 8 2",  # operation
+        "power 2 3",   # operation
+        "root 27 3",   # operation
+        "history",     # show history
+        "undo",        # undo
+        "redo",        # redo
+        "badcommand",  # invalid command
+        "add x y",     # invalid numbers
+        "bogus 1 2",   # invalid operation
+        "exit"         # exit
+    ])
+    printed = []
+
+    def fake_input(prompt):
+        return next(inputs)
+
+    def fake_print(*args, **kwargs):
+        printed.append(args)
+
+    with patch.object(builtins, "input", fake_input), patch.object(builtins, "print", fake_print):
+        from app.calculator_repl import main
+        main()
+    # Check that 'Goodbye!' and menu were printed
+    assert any("Goodbye!" in str(arg) for args in printed for arg in args)
+    assert any("Commands:" in str(arg) for args in printed for arg in args)
+import builtins
+from unittest.mock import patch
+
+def test_repl_main_full_coverage():
+    # Simulate a sequence of commands: help, add, history, exit
+    inputs = iter(["help", "add 1 2", "history", "exit"])
+    printed = []
+
+    def fake_input(prompt):
+        return next(inputs)
+
+    def fake_print(*args, **kwargs):
+        printed.append(args)
+
+    with patch.object(builtins, "input", fake_input), patch.object(builtins, "print", fake_print):
+        from app.calculator_repl import main
+        main()
+    # Check that 'Goodbye!' was printed
+    assert any("Goodbye!" in str(arg) for args in printed for arg in args)
 def test_help_command():
     history, caretaker = setup()
     result = process_command("help", history, caretaker)
